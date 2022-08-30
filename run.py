@@ -24,7 +24,7 @@ def get_sales_data():
     """
     Get sales figures input from the user
     """
-
+    # Data ANY USER ENTERS will be a string -- need to change it to integer if it's a number
     print("Enter sales data from the last market.")
     print("Data should be six numbers, separated by commas.")
     print("Eg: 10,20,30,40,50,60\n")
@@ -45,6 +45,8 @@ def validate_data(values):
     or if there aren't exactly 6 values.
     """
     try:
+        #CONVERTS string of numbers into integers. If statement checks if exactly 6 values are listed
+        [int(value) for value in values]
         if len(values) != 6:
             raise ValueError(
                 f'Six values are required; you provided {len(values)}'
