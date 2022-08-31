@@ -22,21 +22,28 @@ SHEET = GSPREAD_CLIENT.open('love_sandwiches')
 def get_sales_data():
 
     """
-    Get sales figures input from the user
+    Get sales figures input from the user.
+    Run a while loop to collect a valid string of data from the user
+    via the terminal, which must be a string of 6 numbers separated
+    by commas. The loop will repeatedly request data, until it is valid.
     """
+    while True:
     # Data ANY USER ENTERS will be a string -- need to change it to integer if it's a number
-    print("Enter sales data from the last market.")
-    print("Data should be six numbers, separated by commas.")
-    print("Eg: 10,20,30,40,50,60\n")
+        print("Enter sales data from the last market.")
+        print("Data should be six numbers, separated by commas.")
+        print("Eg: 10,20,30,40,50,60\n")
 
-    data_str = input("Enter your data here: ")
+        data_str = input("Enter your data here: ")
 
-    # USED TO MAKE SURE FUNCTION WORKS
-    # print(f"The data provided is {data_str}")
+        # USED TO MAKE SURE FUNCTION WORKS
+        # print(f"The data provided is {data_str}")
 
-    sales_data = data_str.split(',')
-    # print(sales_data)
-    validate_data(sales_data)
+        sales_data = data_str.split(',')
+        # print(sales_data)
+        if validate_data(sales_data):
+            print('Data is valid')
+            break
+    return sales_data
 
 def validate_data(values):
     """
@@ -53,7 +60,24 @@ def validate_data(values):
             )
     except ValueError as e:
         print(f'Invalid data error: {e}, please enter in a new value\n')
+        return False
+
+    return True   
+
+def update_sales_worksheet(data):
+    """
+    Update sales worksheet, add new row with the list data provided
+    """
+    print('Updating sales worksheet.\n')
+    sales_worksheet = SHEET.worksheet('sales')
+    sales_worksheet.append_row(data)
+    print('Sales worksheet updated successfully.\n')
+
+    
+data = get_sales_data() 
+sales_data = [int(num) for num in data]
+update_sales_worksheet(sales_data)
 
 
 
-get_sales_data()
+# get_sales_data()
